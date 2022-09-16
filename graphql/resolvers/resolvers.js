@@ -2,13 +2,28 @@ const bcryptjs = require('bcryptjs')
 const { User } = require('../../models')
 const { UserInputError } = require(('apollo-server'))
 const {AuthenticationError} = require("apollo-server");
+const jwt = require('jsonwebtoken');
+const {JWT_SECRET} = require('../../config/env.json')
 
 const resolvers = {
   Query: {
-    getUsers: async () => {
+    getUsers: async (_, __, context) => {
       try {
-        const user = await User.findAll()
-        return user
+        let user
+
+        if(context.req && context.req.headers.authorization) {
+          const token = context.req.headers.authorization
+          console.log(token)
+          jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
+            if(err) throw new AuthenticationError('bad credentials')
+
+            user = decodedToken
+          })
+        }
+        
+        const users = await User.findAll()
+        
+        return users
       } catch(err) {
         console.log(err)
       }
@@ -18,6 +33,13 @@ const resolvers = {
       const errors = {}
       
       try {
+        if (username.trim() === '' || password === '') {
+          errors.username = 'fields must not be empty'
+        }
+        if(Object.keys(errors).length > 0) {
+          throw new UserInputError('bad Input', {errors})
+        }
+        
         const user = await User.findOne({where: { username }})
         
         if(!user) {
@@ -31,8 +53,20 @@ const resolvers = {
           errors.password = 'password is incorrect'
           throw new AuthenticationError('password is incorrect', { errors })
         }
+        
+        const token = jwt.sign({
+          username
+        }, JWT_SECRET, { expiresIn: 60 * 60 });
+        
+        
+        user.token = token
+        return {
+          ...user.toJSON(),
+          createdAt: user.createdAt.toISOString(),
+          token
+        }
       } catch(err) {
-      
+        console.log('err', err)
       }
     }
   },

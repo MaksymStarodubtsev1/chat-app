@@ -22,6 +22,7 @@
     "apollo-server": "^3.10.2",
     "bcryptjs": "^2.4.3",
     "graphql": "^16.6.0",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
     "sequelize": "^6.21.6"
   },
