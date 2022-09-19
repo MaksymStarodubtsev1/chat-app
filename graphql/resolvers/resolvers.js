@@ -4,6 +4,7 @@ const { UserInputError } = require(('apollo-server'))
 const {AuthenticationError} = require("apollo-server");
 const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = require('../../config/env.json')
+const { Op } = require('sequelize')
 
 const resolvers = {
   Query: {
@@ -15,13 +16,18 @@ const resolvers = {
           const token = context.req.headers.authorization
           console.log(token)
           jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
-            if(err) throw new AuthenticationError('bad credentials')
-
+            if(err) {
+              throw new AuthenticationError('Unauthenticated')
+            }
             user = decodedToken
+            console.log('////', user, '////')
           })
         }
         
-        const users = await User.findAll()
+        const users = await User.findAll({
+          where: {
+            username: {[Op.ne]: user.username},
+          }})
         
         return users
       } catch(err) {
