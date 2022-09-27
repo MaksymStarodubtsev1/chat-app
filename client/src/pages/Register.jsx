@@ -1,17 +1,39 @@
 import React, {useState} from "react";
 import {Button, Col, Form, Row} from "react-bootstrap";
+import { gql, useMutation } from '@apollo/client';
+
+const REGISTER_USER = gql`
+  mutation register( $username: String! $email: String! $password: String! $confirmPassword: String!) {
+    register(username: $username email: $email password: $password confirmPassword: $confirmPassword) {
+      username
+      email
+    }
+  }
+`;
 
 export default function Register() {
-  const [data, setData] = useState({
+  const [regValues, setRegValues] = useState({
     email: '',
     username: '',
     password: '',
     confirmPassword: '',
   })
   
+  const [errors, setErrors] = useState({})
+  
+  const [register, {loading}] = useMutation(REGISTER_USER, {
+    update(_, res) {
+      console.log(res)
+    },
+    onError(error){
+      setErrors(error.graphQLErrors[0].extensions.errors)
+      console.log(error.graphQLErrors[0].extensions.errors)
+    }
+  });
+  
   const submitRegister = e => {
     e.preventDefault()
-    console.log(data)
+    register({variables: regValues})
   }
   
   return (
@@ -20,55 +42,63 @@ export default function Register() {
         <h1>Register</h1>
         <Form onSubmit={submitRegister}>
           <Form.Group controlId="formRegisterEmail">
-            <Form.Label>Email address</Form.Label>
+            <Form.Label className={errors.email && 'text-danger'}>
+              {errors.email ?? 'Email address'}
+            </Form.Label>
             <Form.Control
               type="email"
-              value={data.email}
-              onChange={({target: {value}}) => setData({
-                ...data,
+              value={regValues.email}
+              onChange={({target: {value}}) => setRegValues({
+                ...regValues,
                 email: value
               })}
             />
           </Form.Group>
         
           <Form.Group controlId="formRegisterUserName">
-            <Form.Label>Username</Form.Label>
+            <Form.Label className={errors.username && 'text-danger'}>
+              {errors.username ?? 'Username'}
+            </Form.Label>
             <Form.Control
               type="text"
-              value={data.username}
-              onChange={({target: {value}}) => setData({
-                ...data,
+              value={regValues.username}
+              onChange={({target: {value}}) => setRegValues({
+                ...regValues,
                 username: value
               })}
             />
           </Form.Group>
         
           <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
+            <Form.Label className={errors.username && 'text-danger'}>
+              { errors.password ?? 'Password'}
+            </Form.Label>
             <Form.Control
               type="password"
-              value={data.password}
-              onChange={({target: {value}}) => setData({
-                ...data,
+              value={regValues.password}
+              onChange={({target: {value}}) => setRegValues({
+                ...regValues,
                 password: value
               })}
             />
           </Form.Group>
         
           <Form.Group controlId="formBasicConfirmPassword">
-            <Form.Label>Confirm Password</Form.Label>
+            <Form.Label className={errors.confirmPassword && 'text-danger'}>
+              {errors.confirmPassword ?? 'Confirm Password'}
+            </Form.Label>
             <Form.Control
               type="password"
-              value={data.confirmPassword}
-              onChange={({target: {value}}) => setData({
-                ...data,
+              value={regValues.confirmPassword}
+              onChange={({target: {value}}) => setRegValues({
+                ...regValues,
                 confirmPassword: value
               })}
             />
           </Form.Group>
           <div className="text-center mt-3">
-            <Button variant="success" type="submit">
-              Register
+            <Button variant="success" type="submit" disabled={loading}>
+              { loading ? 'loading...' : 'Register'}
             </Button>
           </div>
         </Form>
