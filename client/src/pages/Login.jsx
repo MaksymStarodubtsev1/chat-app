@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Button, Col, Form, Row} from "react-bootstrap";
 import { gql, useLazyQuery } from '@apollo/client';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const LOGIN_USER = gql`
   query login( $username: String! $password: String!) {
@@ -19,14 +19,15 @@ export const Login = (props) => {
     username: '',
     password: '',
   })
+  let navigate = useNavigate();
   
   const [errors, setErrors] = useState({})
   
   const [loginUser, {loading}] = useLazyQuery(LOGIN_USER, {
     onCompleted: (data) => {
-      console.log(data)
+      console.log('succ')
       localStorage.setItem('token', data.login.token)
-      props.history.push('/')
+      navigate("/")
     },
     onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors)
   });
@@ -76,7 +77,7 @@ export const Login = (props) => {
             </Button>
             <br/>
             <small>
-              I don't have an account <Link to='/register'>Register</Link>
+              Don't have an account? <Link to='/register'>Register</Link>
             </small>
           </div>
         </Form>

@@ -96,6 +96,10 @@ export default function Register(props) {
             <Button variant="success" type="submit" disabled={loading}>
               { loading ? 'loading...' : 'Register'}
             </Button>
+            <br/>
+            <small>
+              Have an account? <Link to='/login'>Login</Link>
+            </small>
           </div>
         </Form>
       </Col>
