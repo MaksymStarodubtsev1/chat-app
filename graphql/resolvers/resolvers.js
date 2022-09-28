@@ -39,31 +39,23 @@ const resolvers = {
       const errors = {}
       
       try {
-        if (username.trim() === '' || password === '') {
-          errors.username = 'fields must not be empty'
-        }
-        if(Object.keys(errors).length > 0) {
-          throw new UserInputError('bad Input', {errors})
-        }
+        if (username.trim() === '') errors.username = 'field must not be empty'
+        if (password === '') errors.password = 'field must not be empty'
+        if(Object.keys(errors).length > 0) throw new UserInputError('bad Input', {errors})
         
         const user = await User.findOne({where: { username }})
-        
         if(!user) {
           errors.username = 'user not found'
           throw new UserInputError('user not found', { errors})
         }
         
         const correctPassword = await bcryptjs.compare(password, user.password)
-        
         if(!correctPassword) {
           errors.password = 'password is incorrect'
-          throw new AuthenticationError('password is incorrect', { errors })
+          throw new UserInputError('password is incorrect', { errors })
         }
         
-        const token = jwt.sign({
-          username
-        }, JWT_SECRET, { expiresIn: 60 * 60 });
-        
+        const token = jwt.sign({username}, JWT_SECRET, { expiresIn: 60 * 60 });
         
         user.token = token
         return {
@@ -73,6 +65,7 @@ const resolvers = {
         }
       } catch(err) {
         console.log('err', err)
+        throw err
       }
     }
   },
@@ -92,7 +85,7 @@ const resolvers = {
         const userByName = await User.findOne({where: { username }})
         const userByEmail = await User.findOne({where: { email }})
         
-        if(userByName || userByEmail) errors.userHasTaken = 'this user has been taken'
+        if(userByName || userByEmail) errors.username = 'this user has been taken'
         
         if(Object.keys(errors).length > 0) throw errors
         

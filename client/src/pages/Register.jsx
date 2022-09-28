@@ -25,9 +25,8 @@ export default function Register() {
     update(_, res) {
       console.log(res)
     },
-    onError(error){
-      setErrors(error.graphQLErrors[0].extensions.errors)
-      console.log(error.graphQLErrors[0].extensions.errors)
+    onError(err){
+      setErrors(err.graphQLErrors[0].extensions.errors)
     }
   });
   
