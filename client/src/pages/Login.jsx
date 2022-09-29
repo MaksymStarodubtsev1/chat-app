@@ -25,7 +25,6 @@ export const Login = (props) => {
   
   const [loginUser, {loading}] = useLazyQuery(LOGIN_USER, {
     onCompleted: (data) => {
-      console.log('succ')
       localStorage.setItem('token', data.login.token)
       navigate("/")
     },
