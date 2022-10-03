@@ -1,5 +1,5 @@
 const bcryptjs = require('bcryptjs')
-const { Message, User } = require('../../models')
+const { User } = require('../../models')
 const { UserInputError } = require(('apollo-server'))
 const {AuthenticationError} = require("apollo-server");
 const jwt = require('jsonwebtoken');
@@ -77,42 +77,19 @@ const resolvers = {
         
         if(Object.keys(errors).length > 0) throw errors
         
-      const hashPassword = await bcryptjs.hash(password, 6)
-      
-      const user = await User.create({
-        username,
-        email,
-        password: hashPassword
-      })
-      
-      return await user
+        const hashPassword = await bcryptjs.hash(password, 6)
+        
+        const user = await User.create({
+          username,
+          email,
+          password: hashPassword
+        })
+        
+        return await user
       } catch(err) {
         throw new UserInputError('Bad input', { errors: err})
       }
     },
-    sendMessage: async(_, {to, content}, {user}) => {
-      try {
-        if(!user) throw new AuthenticationError('Unauthenticated')
-        
-        const recipient = User.findOne({where: {username: to}})
-        
-        if(!recipient) throw new AuthenticationError('User not found')
-        if(content.trim() === '') throw new AuthenticationError('Message need to be not empty')
-  
-        const message = Message.create({
-          from: user.username,
-          to,
-          content
-        })
-        
-        return message
-        
-        
-      } catch(err) {
-        console.log(err)
-        throw err
-      }
-    }
   }
 };
 
