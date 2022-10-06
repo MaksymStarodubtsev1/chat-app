@@ -1,7 +1,17 @@
 import React, {createContext, useReducer, useContext} from 'react'
+import jwtDecode from 'jwt-decode';
 
 const AuthStateContext = createContext()
 const AuthDispatchContext = createContext()
+
+const token = localStorage.getItem('token')
+
+if (token) {
+  const decodedToken = jwtDecode(token)
+  const expiresAt = new Date(decodedToken.exp * 1000)
+  console.log('expiresAt', expiresAt)
+}
+
 
 const authReducer = (state, action) => {
   switch (action.type) {
