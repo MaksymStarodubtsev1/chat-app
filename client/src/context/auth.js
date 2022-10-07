@@ -4,12 +4,16 @@ import jwtDecode from 'jwt-decode';
 const AuthStateContext = createContext()
 const AuthDispatchContext = createContext()
 
-const token = localStorage.getItem('token')
+
+let user
+  const token = localStorage.getItem('token')
 
 if (token) {
   const decodedToken = jwtDecode(token)
   const expiresAt = new Date(decodedToken.exp * 1000)
   console.log('expiresAt', expiresAt)
+  if(new Date() > expiresAt) localStorage.removeItem('token')
+  else user = decodedToken
 }
 
 
@@ -34,7 +38,7 @@ const authReducer = (state, action) => {
 
 export const AuthProvider = ({ children }) => {
   
-  const [state, dispatch] = useReducer(authReducer, { user: null})
+  const [state, dispatch] = useReducer(authReducer, { user })
   return (
     <AuthDispatchContext.Provider value={dispatch}>
       <AuthStateContext.Provider value={state}>

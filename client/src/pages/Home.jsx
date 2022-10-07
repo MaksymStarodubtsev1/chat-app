@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useAuthDispatch} from "../context/auth";
 
 
-export const Home = ({history}) => {
+export const Home = () => {
   const dispatch = useAuthDispatch()
   const navigate = useNavigate();
   const logOut = () => {
