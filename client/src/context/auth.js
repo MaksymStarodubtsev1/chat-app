@@ -5,7 +5,7 @@ const AuthStateContext = createContext()
 const AuthDispatchContext = createContext()
 
 
-let user
+let user = null
   const token = localStorage.getItem('token')
 
 if (token) {
