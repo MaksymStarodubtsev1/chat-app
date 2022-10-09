@@ -4,9 +4,11 @@ const typeDefs = gql`
   type User {
     id: ID!
     username: String!
-    email: String!
+    email: String
+    imageUrl: String
     createdAt: String!
     token: String
+    latestMessage: Message
   }
   
   type Message {
