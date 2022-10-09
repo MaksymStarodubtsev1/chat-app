@@ -23,7 +23,6 @@ const resolvers = {
           },
           order: [['createdAt', 'DESC']]
         })
-        console.log('////usersMessagesList', allUserMessages)
 
         const usersMessagesList = users.map((someUser) => {
           const latestMessage = allUserMessages.find(
@@ -32,15 +31,6 @@ const resolvers = {
           someUser.latestMessage = latestMessage
           return someUser
         })
-  
-  
-        // const usersMessagesList = users.map((otherUser) => {
-        //   const latestMessage = allUserMessages.find(
-        //     (m) => m.from === otherUser.username || m.to === otherUser.username
-        //   )
-        //   otherUser.latestMessage = latestMessage
-        //   return otherUser
-        // })
         
         
         return usersMessagesList

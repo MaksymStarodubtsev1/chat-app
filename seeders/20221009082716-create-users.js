@@ -17,7 +17,7 @@ module.exports = {
         email: 'john@email.com',
         password: password,
         imageUrl:
-          'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1700&q=80',
+          'https://plus.unsplash.com/premium_photo-1661329835271-c130b1ea3f28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60',
         createdAt,
         updatedAt,
       },
@@ -26,7 +26,7 @@ module.exports = {
         email: 'jane@email.com',
         password: password,
         imageUrl:
-          'https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2190&q=80',
+          'https://plus.unsplash.com/premium_photo-1664373622147-d610c247a11b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60',
         createdAt,
         updatedAt,
       },
@@ -35,7 +35,7 @@ module.exports = {
         email: 'boss@email.com',
         password: password,
         imageUrl:
-          'https://images.unsplash.com/photo-1566753323558-f4e0952af115?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2122&q=80',
+          'https://images.unsplash.com/photo-1665057669499-2cb221f7a075?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzMnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60',
         createdAt,
         updatedAt,
       },
