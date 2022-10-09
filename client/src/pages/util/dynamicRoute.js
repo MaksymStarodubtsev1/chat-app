@@ -9,7 +9,7 @@ export default function DynamicRoute(props) {
 
   if(props.auth && !user) return <Navigate to="/login" replace />
   else if(props.guest && user) return <Navigate to="/" replace />
-   else return <Outlet />
+  else return <Outlet />
 
   
 }

@@ -16,7 +16,6 @@ if (token) {
   else user = decodedToken
 }
 
-
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN':
