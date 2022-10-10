@@ -10,6 +10,16 @@ const messageReducer = (state, action) => {
       return {
         ...state, users: action.payload,
       }
+    case 'SET_USER_MESSAGES':
+      const {user, messages} = action.payload
+      return state
+    
+    case 'SET_SELECTED_USER':
+      const usersCopy = state.users.map(user => ({
+        ...user,
+        selected: user.username === action.payload
+      }))
+      return { ...state, users: usersCopy}
     default:
       throw new Error(`Unknown action type: ${action.type}`)
   }

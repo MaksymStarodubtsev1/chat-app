@@ -16,7 +16,7 @@ const GET_USERS = gql`
   }
 `
 
-export const Users = ({ addSelectedUser, selectedUser }) => {
+export const Users = () => {
   const dispatch = useMessageDispatch()
   const { users } = useMessageState()
   const { loading } = useQuery(GET_USERS,{
@@ -27,11 +27,11 @@ export const Users = ({ addSelectedUser, selectedUser }) => {
   
   return (
     <>
-      {usersData.length < 1 ? usersMessage : usersData.map(({username, imageUrl, latestMessage}) => (
+      {usersData.length < 1 ? usersMessage : usersData.map(({username, imageUrl, latestMessage, selected}) => (
         <div
-          className={`user-div d-flex p-3 ${username === selectedUser && 'bg-white'}`}
+          className={`user-div d-flex p-3 ${selected && 'bg-white'}`}
           key={username}
-          onClick={() => addSelectedUser(username)}
+          onClick={() => dispatch({type: 'SET_SELECTED_USER', payload: username})}
           role="button"
         >
           <Image

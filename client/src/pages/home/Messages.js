@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import {gql, useLazyQuery } from "@apollo/client";
 
 const GET_MESSAGES = gql`
@@ -12,8 +12,9 @@ query getMessages($from: String!) {
 `
 
 
-export const Messages = ({ selectedUser }) => {
-  
+export const Messages = () => {
+  const { users } = useContext()
+  const seln   
   const [ getMessages, { loading: messageLoading, data: messageData }] = useLazyQuery(GET_MESSAGES)
   
   useEffect(() => {
