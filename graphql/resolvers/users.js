@@ -53,8 +53,8 @@ const resolvers = {
           throw new UserInputError('user not found', { errors})
         }
         
-        const correctPassword = await bcryptjs.compare(password, user.password)
-        if(!correctPassword) {
+        const isPasswordCorrect = await bcryptjs.compare(password, user.password)
+        if(!isPasswordCorrect) {
           errors.password = 'password is incorrect'
           throw new UserInputError('password is incorrect', { errors })
         }

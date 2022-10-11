@@ -12,6 +12,7 @@ const messageReducer = (state, action) => {
       }
     case 'SET_USER_MESSAGES':
       const {user, messages} = action.payload
+      console.log('messages', messages)
       return state
     
     case 'SET_SELECTED_USER':

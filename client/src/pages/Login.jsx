@@ -17,7 +17,7 @@ const LOGIN_USER = gql`
 `;
 
 export const Login = (props) => {
-  const [regValues, setRegValues] = useState({
+  const [registerValues, setRegValues] = useState({
     username: '',
     password: '',
   })
@@ -27,6 +27,7 @@ export const Login = (props) => {
   
   const [loginUser, {loading}] = useLazyQuery(LOGIN_USER, {
     onCompleted: (data) => {
+      console.log('data', data)
       dispatch({type: 'LOGIN', payload: data.login})
       navigate("/")
     },
@@ -35,7 +36,7 @@ export const Login = (props) => {
   
   const submitLogin = e => {
     e.preventDefault()
-    loginUser({variables: regValues})
+    loginUser({variables: registerValues})
   }
   
   return (
@@ -50,9 +51,9 @@ export const Login = (props) => {
             </Form.Label>
             <Form.Control
               type="text"
-              value={regValues.username}
+              value={registerValues.username}
               onChange={({target: {value}}) => setRegValues({
-                ...regValues,
+                ...registerValues,
                 username: value
               })}
             />
@@ -64,9 +65,9 @@ export const Login = (props) => {
             </Form.Label>
             <Form.Control
               type="password"
-              value={regValues.password}
+              value={registerValues.password}
               onChange={({target: {value}}) => setRegValues({
-                ...regValues,
+                ...registerValues,
                 password: value
               })}
             />
