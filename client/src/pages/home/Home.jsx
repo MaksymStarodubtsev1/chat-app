@@ -14,7 +14,7 @@ export const Home = () => {
   
   const logOut = () => {
     dispatch({type: 'LOGOUT'})
-    navigate('/login')
+    window.location.href =  '/login'
   }
   
   return (
