@@ -1,6 +1,7 @@
-import React, {useContext, useEffect} from "react";
+import React, {Fragment, useEffect} from "react";
 import {gql, useLazyQuery } from "@apollo/client";
 import {useMessageDispatch, useMessageState} from "../../context/message";
+import {Message} from "./Message";
 
 const GET_MESSAGES = gql`
 query getMessages($from: String!) {
@@ -21,7 +22,6 @@ export const Messages = () => {
   
   useEffect(() => {
     if(selectedUser && !selectedUser.messages) {
-      console.log('selectedUser', selectedUser)
       getMessages({ variables: { from: selectedUser.username }})
     }
   }, [selectedUser])
@@ -35,12 +35,23 @@ export const Messages = () => {
     }
   }, [messageData])
   
+  const messagesList = messageData?.getMessages
+  
   return (
     <>
-      {messageData?.getMessages?.length > 0 && (
-        messageData?.getMessages.map(({content, uuid}) => (
-          <p key={uuid}>{content}</p>
-        )))}
+      {messagesList?.length > 0 && (
+        messagesList.map((message, index) => (
+          <>
+            <Message key={message.key} message={message}/>
+            { index === messagesList.at(-1) && (
+              <div className="invisible">
+                <hr className="m-0" />
+              </div>
+            )}
+          </>
+        ))
+        )
+      }
     </>
   )
 }

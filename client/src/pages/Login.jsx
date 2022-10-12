@@ -27,7 +27,6 @@ export const Login = (props) => {
   
   const [loginUser, {loading}] = useLazyQuery(LOGIN_USER, {
     onCompleted: (data) => {
-      console.log('data', data)
       dispatch({type: 'LOGIN', payload: data.login})
       navigate("/")
     },

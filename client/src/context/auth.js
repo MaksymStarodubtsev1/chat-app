@@ -10,7 +10,6 @@ let user = null
 
 if (token) {
   const decodedToken = jwtDecode(token)
-  console.log('decodedToken', decodedToken)
   const expiresAt = new Date(decodedToken.exp * 1000)
 
   if(new Date() > expiresAt) localStorage.removeItem('token')

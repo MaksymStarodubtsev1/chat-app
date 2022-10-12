@@ -1,8 +1,7 @@
-import React, {Fragment, useEffect, useState} from "react";
-import {Row, Col, Button, Image} from "react-bootstrap";
+import React, {Fragment, useState} from "react";
+import {Row, Col, Button} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom";
 import {useAuthDispatch} from "../../context/auth";
-import {gql, useLazyQuery, useQuery} from "@apollo/client";
 import {Users} from "./Users";
 import {Messages} from "./Messages";
 
@@ -38,7 +37,7 @@ export const Home = () => {
         <Col sx={4} className="p-0 bg-secondary">
           <Users addSelectedUser={addSelectedUser} selectedUser={selectedUser}/>
         </Col>
-        <Col sx={8}>
+        <Col sx={8} className="messages-box d-flex flex-column-reverse">
           <Messages selectedUser={selectedUser}/>
         </Col>
       </Row>
