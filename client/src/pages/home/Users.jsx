@@ -39,11 +39,10 @@ export const Users = () => {
         >
           <Image
             src={imageUrl}
-            roundedCircle={true}
-            className="mr-2"
-            style={{width: 50, height: 50, objectFit: 'cover'}}
+            className="mr-2 user-image"
+
           />
-          <div className="ps-3">
+          <div className="ps-3 d-none d-md-block">
             <p className="text-success">{username}</p>
             <p className="font-weight-light">{latestMessage?.content ?? 'you are now connected'}</p>
           </div>
