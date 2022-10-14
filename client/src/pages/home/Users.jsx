@@ -38,7 +38,7 @@ export const Users = () => {
           role="button"
         >
           <Image
-            src={imageUrl}
+            src={imageUrl ?? ''}
             className="mr-2 user-image"
 
           />

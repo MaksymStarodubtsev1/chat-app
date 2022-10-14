@@ -5,7 +5,6 @@ import {OverlayTrigger, Tooltip} from "react-bootstrap";
 
 export const Message = ({message}) => {
   const { user } = useAuthState()
-  console.log('user', user.username, message);
   const fromUs = user.username === message.from
   return (
     <>

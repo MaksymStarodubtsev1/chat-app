@@ -34,10 +34,10 @@ export const Home = () => {
         </Col>
       </Row>
       <Row className="bg-white">
-        <Col sx={2} className="p-0 bg-secondary d-sx-block flex-md-column">
+        <Col xs={2} md={4} className="p-0 bg-secondary flex">
           <Users addSelectedUser={addSelectedUser} selectedUser={selectedUser}/>
         </Col>
-        <Col sx={10} className="messages-box d-flex flex-column-reverse">
+        <Col xs={10} md={8} className="messages-box d-flex flex-column-reverse">
           <Messages selectedUser={selectedUser}/>
         </Col>
       </Row>
