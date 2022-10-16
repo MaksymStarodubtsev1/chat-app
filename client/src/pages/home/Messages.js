@@ -59,7 +59,7 @@ export const Messages = () => {
   
   const onSubmit = (e) => {
     e.preventDefault()
-    if(content.length < 1 || !selectedUser) return
+    if(content.trim() === '' || !selectedUser) return
   
     sendMessage({variables: { to: selectedUser.username, content}})
   
