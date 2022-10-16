@@ -2,7 +2,7 @@ import React, {Fragment, useEffect, useState} from "react";
 import {gql, useLazyQuery, useMutation } from "@apollo/client";
 import {useMessageDispatch, useMessageState} from "../../context/message";
 import {Message} from "./Message";
-import {Form} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 
 const GET_MESSAGES = gql`
 query getMessages($from: String!) {
@@ -59,9 +59,11 @@ export const Messages = () => {
   
   const onSubmit = (e) => {
     e.preventDefault()
-    if(content.length < 1) return
+    if(content.length < 1 || !selectedUser) return
   
     sendMessage({variables: { to: selectedUser.username, content}})
+  
+    setContent('')
   }
   console.log('messagesList', messages)
   return (
@@ -76,6 +78,7 @@ export const Messages = () => {
             onChange={e => setContent(e.target.value)}
           />
         </Form.Group>
+        <button class="icon-compass"></button>
       </Form>
       {messages?.length > 0 && (
         messages.map((message, index) => (
