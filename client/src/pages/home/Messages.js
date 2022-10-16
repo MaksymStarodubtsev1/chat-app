@@ -2,7 +2,7 @@ import React, {Fragment, useEffect, useState} from "react";
 import {gql, useLazyQuery, useMutation } from "@apollo/client";
 import {useMessageDispatch, useMessageState} from "../../context/message";
 import {Message} from "./Message";
-import {Button, Form} from "react-bootstrap";
+import {Button, Form, Stack} from "react-bootstrap";
 
 const GET_MESSAGES = gql`
 query getMessages($from: String!) {
@@ -69,16 +69,17 @@ export const Messages = () => {
   return (
     <>
       <Form onSubmit={onSubmit}>
-        <Form.Group>
-          <Form.Control
-            type="text"
-            className="mb-1"
-            placeholder="Type a message.."
-            value={content}
-            onChange={e => setContent(e.target.value)}
-          />
-        </Form.Group>
-        <button class="icon-compass"></button>
+          <Form.Group className="d-flex align-items-center mb-1">
+            <Form.Control
+              type="text"
+              placeholder="Type a message.."
+              value={content}
+              onChange={e => setContent(e.target.value)}
+            />
+            <Button type="submit" class="btn ms-1">
+              <span className="icon-rocket" />
+            </Button>
+          </Form.Group>
       </Form>
       {messages?.length > 0 && (
         messages.map((message, index) => (
