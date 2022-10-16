@@ -17,7 +17,7 @@ query getMessages($from: String!) {
 const SEND_MESSAGES = gql`
 mutation sendMessage($to: String! $content: String!) {
   sendMessage(to: $to, content: $content) {
-    to content
+    to from content
   }
 }
 `
@@ -81,7 +81,7 @@ export const Messages = () => {
         messages.map((message, index) => (
           <>
             <Message key={message.key} message={message}/>
-            { index === messages  .at(-1) && (
+            { index === messages.at(-1) && (
               <div className="invisible">
                 <hr className="m-0" />
               </div>

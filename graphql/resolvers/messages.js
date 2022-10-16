@@ -42,11 +42,13 @@ const resolvers = {
         else if(recipient.username === user.username) throw new UserInputError("User can't message yourself")
         if(content.trim() === '') throw new AuthenticationError('Message need to be not empty')
         
-        const message = Message.create({
+        const message = await Message.create({
           from: user.username,
           to,
           content
         })
+        
+        
         
         return message
         
