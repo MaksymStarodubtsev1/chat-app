@@ -1,8 +1,7 @@
 const { Message, User } = require('../../models')
-const { UserInputError } = require(('apollo-server'))
-const {AuthenticationError} = require("apollo-server");
+const { UserInputError, AuthenticationError, PubSub } = require('apollo-server')
 const {Op} = require("sequelize");
-
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
@@ -57,6 +56,11 @@ const resolvers = {
         console.log(err)
         throw err
       }
+    }
+  },
+  Subscription: {
+    newMessage: {
+     subscribe: () => PubSub.asyncIterator(['NEW_MESSAGE']),
     }
   }
 };
