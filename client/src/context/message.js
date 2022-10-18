@@ -5,7 +5,7 @@ const MessageDispatchContext = createContext()
 
 
 const messageReducer = (state, action) => {
-  console.log('action', action)
+
   switch (action.type) {
     case 'SET_USERS':
       return {
@@ -16,7 +16,6 @@ const messageReducer = (state, action) => {
       
       const yy = { ...state, users: state.users.map(u => {
           if (user === u?.username) {
-            console.log('user11', user)
             return {...u, messages}
           }
           return u
@@ -42,7 +41,7 @@ const messageReducer = (state, action) => {
         return u
       })
 
-        // stateCopyWithMessage[userIndex].messages = [action.payload.message, ...state[userIndex].messages]
+        // stateCopyWithMessage[userIndex].messages = [action.payload.message, ...state.users[userIndex].messages]
         // console.log('messageList2', messageList)
       
       return {...state, users}

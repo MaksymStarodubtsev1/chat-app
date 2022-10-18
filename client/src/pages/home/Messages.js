@@ -32,7 +32,6 @@ export const Messages = () => {
   const [ getMessages, { loading: messageLoading, data: messageData }] = useLazyQuery(GET_MESSAGES)
   const [ sendMessage ] = useMutation(SEND_MESSAGES, {
     onCompleted: data => {
-      console.log('data', data)
       dispatch({type: 'ADD_MESSAGE', payload: {
       user: selectedUser.username,
       message: data.sendMessage
@@ -65,7 +64,6 @@ export const Messages = () => {
   
     setContent('')
   }
-  console.log('messagesList', messages)
   return (
     <>
       <Form onSubmit={onSubmit}>
