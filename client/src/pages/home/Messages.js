@@ -1,6 +1,7 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {gql, useLazyQuery, useMutation, useSubscription} from "@apollo/client";
 import {useMessageDispatch, useMessageState} from "../../context/message";
+import { useAuthState } from "../../context/auth";
 import {Message} from "./Message";
 import {Button, Form} from "react-bootstrap";
 
@@ -17,8 +18,7 @@ query getMessages($from: String!) {
 const NEW_MESSAGE = gql`
 subscription newMessage {
   newMessage {
-    from
-    content
+    to from content uuid
   }
 }
 `;
@@ -26,12 +26,13 @@ subscription newMessage {
 const SEND_MESSAGES = gql`
 mutation sendMessage($to: String! $content: String!) {
   sendMessage(to: $to, content: $content) {
-    to from content
+    to from content uuid
   }
 }
 `
 
 export const Messages = () => {
+  const { user } = useAuthState()
   const { users } = useMessageState()
   const dispatch = useMessageDispatch()
   const [content, setContent] = useState('')
@@ -40,17 +41,24 @@ export const Messages = () => {
   const [ getMessages, { data: messageData }] = useLazyQuery(GET_MESSAGES)
   const [ sendMessage ] = useMutation(SEND_MESSAGES, {
     onCompleted: data => {
-      dispatch({type: 'ADD_MESSAGE', payload: {
-      user: selectedUser.username,
-      message: data.sendMessage
-      }})
+      console.log('hello there')
     }
   })
   
   const { data: subscriptionData } = useSubscription(NEW_MESSAGE)
   
   useEffect(() => {
-    console.log('subscriptionData', subscriptionData);
+    if(subscriptionData) {
+    console.log('subscriptionData', subscriptionData.newMessage);
+    const message = subscriptionData.newMessage
+    const otherUser = user.username === message.to ? message.from : message.to
+
+    dispatch({type: 'ADD_MESSAGE', payload: {
+        user: otherUser,
+        message: subscriptionData.newMessage
+      }})
+    
+    }
   }, [subscriptionData])
   
   useEffect(() => {

@@ -36,7 +36,11 @@ const messageReducer = (state, action) => {
       
       const users = stateCopyWithMessage.map(u => {
         if(u.username === action.payload.user) {
-          return {...u, messages: [action.payload.message, ...u.messages]}
+          return {
+            ...u,
+            messages: [action.payload.message, ...u.messages],
+            latestMessage: action.payload.message,
+          }
         }
         return u
       })

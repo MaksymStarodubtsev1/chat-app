@@ -28,7 +28,7 @@ export const Login = (props) => {
   const [loginUser, {loading}] = useLazyQuery(LOGIN_USER, {
     onCompleted: (data) => {
       dispatch({type: 'LOGIN', payload: data.login})
-      navigate("/")
+      window.location.href = '/'
     },
     onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors)
   });

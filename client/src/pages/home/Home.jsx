@@ -13,7 +13,7 @@ export const Home = () => {
   
   const logOut = () => {
     dispatch({type: 'LOGOUT'})
-    window.location.href =  '/login'
+    window.location.href = '/login'
   }
   
   return (
