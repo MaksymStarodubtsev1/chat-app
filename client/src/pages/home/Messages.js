@@ -2,7 +2,7 @@ import React, {Fragment, useEffect, useState} from "react";
 import {gql, useLazyQuery, useMutation } from "@apollo/client";
 import {useMessageDispatch, useMessageState} from "../../context/message";
 import {Message} from "./Message";
-import {Button, Form, Stack} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 
 const GET_MESSAGES = gql`
 query getMessages($from: String!) {
@@ -22,14 +22,13 @@ mutation sendMessage($to: String! $content: String!) {
 }
 `
 
-
 export const Messages = () => {
   const { users } = useMessageState()
   const dispatch = useMessageDispatch()
   const [content, setContent] = useState('')
   const selectedUser = users?.find(u => u.selected === true)
   const messages = selectedUser?.messages
-  const [ getMessages, { loading: messageLoading, data: messageData }] = useLazyQuery(GET_MESSAGES)
+  const [ getMessages, { data: messageData }] = useLazyQuery(GET_MESSAGES)
   const [ sendMessage ] = useMutation(SEND_MESSAGES, {
     onCompleted: data => {
       dispatch({type: 'ADD_MESSAGE', payload: {
@@ -53,8 +52,6 @@ export const Messages = () => {
         }})
     }
   }, [messageData])
-  
-  const messagesList = messageData?.getMessages
   
   const onSubmit = (e) => {
     e.preventDefault()
