@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {gql, useLazyQuery, useMutation } from "@apollo/client";
+import {gql, useLazyQuery, useMutation, useSubscription} from "@apollo/client";
 import {useMessageDispatch, useMessageState} from "../../context/message";
 import {Message} from "./Message";
 import {Button, Form} from "react-bootstrap";
@@ -13,6 +13,15 @@ query getMessages($from: String!) {
   }
 }
 `
+
+const NEW_MESSAGE = gql`
+subscription newMessage {
+  newMessage {
+    from
+    content
+  }
+}
+`;
 
 const SEND_MESSAGES = gql`
 mutation sendMessage($to: String! $content: String!) {
@@ -37,6 +46,12 @@ export const Messages = () => {
       }})
     }
   })
+  
+  const { data: subscriptionData } = useSubscription(NEW_MESSAGE)
+  
+  useEffect(() => {
+    console.log('subscriptionData', subscriptionData);
+  }, [subscriptionData])
   
   useEffect(() => {
     if(selectedUser && !selectedUser.messages) {
