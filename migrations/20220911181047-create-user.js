@@ -27,6 +27,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
+      charts: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        get() {
+          return this.getDataValue('charts').split(';')
+        },
+        set(val) {
+          this.setDataValue('charts',val.join(';'));
+        },
+      },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE

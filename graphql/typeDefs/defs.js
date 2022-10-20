@@ -7,6 +7,7 @@ const typeDefs = gql`
     email: String
     imageUrl: String
     createdAt: String!
+    charts: String!
     token: String
     latestMessage: Message
   }

@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    charts: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
