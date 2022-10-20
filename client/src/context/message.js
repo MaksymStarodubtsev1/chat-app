@@ -38,7 +38,7 @@ const messageReducer = (state, action) => {
         if(u.username === action.payload.user) {
           return {
             ...u,
-            messages: [action.payload.message, ...u.messages],
+            messages: [action.payload.message, ...(u?.messages || [])],
             latestMessage: action.payload.message,
           }
         }
