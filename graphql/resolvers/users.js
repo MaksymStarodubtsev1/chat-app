@@ -72,7 +72,7 @@ const resolvers = {
         throw err
       }
     },
-    getUserChart: async (_, __, { user }) => {
+    getUserCharts: async (_, __, { user }) => {
       const userWithChart = await User.findOne({
         where: {username: user.username}
       })
