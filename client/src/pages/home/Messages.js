@@ -39,17 +39,12 @@ export const Messages = () => {
   const selectedUser = users?.find(u => u.selected === true)
   const messages = selectedUser?.messages
   const [ getMessages, { data: messageData }] = useLazyQuery(GET_MESSAGES)
-  const [ sendMessage ] = useMutation(SEND_MESSAGES, {
-    onCompleted: data => {
-      console.log('hello there')
-    }
-  })
+  const [ sendMessage ] = useMutation(SEND_MESSAGES)
   
   const { data: subscriptionData } = useSubscription(NEW_MESSAGE)
   
   useEffect(() => {
     if(subscriptionData) {
-    console.log('subscriptionData', subscriptionData.newMessage);
     const message = subscriptionData.newMessage
     const otherUser = user.username === message.to ? message.from : message.to
 

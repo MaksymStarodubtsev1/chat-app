@@ -16,7 +16,7 @@ module.exports = {
         username: 'john',
         email: 'john@email.com',
         password: password,
-        charts: '',
+        charts: 'jane;boss',
         imageUrl:
           'https://plus.unsplash.com/premium_photo-1661329835271-c130b1ea3f28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60',
         createdAt,
@@ -26,7 +26,7 @@ module.exports = {
         username: 'jane',
         email: 'jane@email.com',
         password: password,
-        charts: '',
+        charts: 'john;boss',
         imageUrl:
           'https://plus.unsplash.com/premium_photo-1664373622147-d610c247a11b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60',
         createdAt,
@@ -36,7 +36,7 @@ module.exports = {
         username: 'boss',
         email: 'boss@email.com',
         password: password,
-        charts: '',
+        charts: 'john;jane',
         imageUrl:
           'https://images.unsplash.com/photo-1665057669499-2cb221f7a075?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzMnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60',
         createdAt,

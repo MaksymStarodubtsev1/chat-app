@@ -63,7 +63,6 @@ const resolvers = {
     newMessage: {
      subscribe: withFilter(
        (_, __, { pubsub, user }) => {
-         console.log('///////dsafs///////', user)
          if(!user) throw new AuthenticationError('Unauthenticated')
          return pubsub.asyncIterator('NEW_MESSAGE')
        }, ({newMessage}, _, {user}) => {

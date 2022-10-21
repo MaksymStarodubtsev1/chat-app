@@ -71,6 +71,14 @@ const resolvers = {
         console.log('err', err)
         throw err
       }
+    },
+    getUserChart: async (_, __, { user }) => {
+      const userWithChart = await User.findOne({
+        where: {username: user.username}
+      })
+      console.log('UserWithChart///', userWithChart.charts)
+
+      return 'fwfwe'
     }
   },
   Mutation: {

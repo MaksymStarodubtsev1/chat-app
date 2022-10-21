@@ -22,6 +22,7 @@ const typeDefs = gql`
   
   type Query {
     getUsers: [User]!
+    getUserChart: String!
     login(username: String!, password: String!): User!
     getMessages(from: String!): [Message]!
   }

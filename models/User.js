@@ -33,6 +33,12 @@ module.exports = (sequelize, DataTypes) => {
     charts: {
       type: DataTypes.STRING,
       allowNull: false,
+      get() {
+        return this.getDataValue('charts').split(';')
+      },
+      set(val) {
+        this.setDataValue('charts',val.join(';'));
+      },
     },
     password: {
       type: DataTypes.STRING,
