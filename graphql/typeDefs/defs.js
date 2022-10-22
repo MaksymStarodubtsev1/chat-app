@@ -22,7 +22,7 @@ const typeDefs = gql`
   
   type Query {
     getUsers: [User]!
-    getUserChats: [String]
+    getUserChats: [User]
     login(username: String!, password: String!): User!
     getMessages(from: String!): [Message]!
   }

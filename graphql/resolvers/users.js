@@ -38,6 +38,19 @@ const resolvers = {
         console.log(err)
       }
     },
+    getUserChats: async (_, __, { user }) => {
+      const userWithChart = await User.findOne({
+        where: {username: user.username}
+      })
+      const friends = await User.findAll({
+        where: {
+          username: {[Op.in]: userWithChart.chats},
+        }
+      })
+      console.log('UserWithChart///', friends)
+    
+      return friends
+    },
     login: async (_, args) => {
       const {username, password} = args
       const errors = {}
@@ -71,14 +84,6 @@ const resolvers = {
         console.log('err', err)
         throw err
       }
-    },
-    getUserChats: async (_, __, { user }) => {
-      const userWithChart = await User.findOne({
-        where: {username: user.username}
-      })
-      console.log('UserWithChart///', userWithChart.chats)
-
-      return 'fwfwe'
     }
   },
   Mutation: {
