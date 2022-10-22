@@ -11,12 +11,18 @@ const resolvers = {
     getUsers: async (_, __, { user }) => {
       try {
         if(!user) throw new AuthenticationError('Unauthenticated')
-        
+  
+        const userWithChart = await User.findOne({
+          where: {username: user.username}
+        })
         const users = await User.findAll({
-          attributes: ['username', 'imageUrl', 'createdAt'],
           where: {
-            username: {[Op.ne]: user.username},
-        }})
+            username: {
+              [Op.in]: userWithChart.chats,
+              [Op.ne]: user.username
+            },
+          }
+        })
         
         const allUserMessages = await Message.findAll({where: {
           [Op.or]: [{from: user.username}, {to: user.username}],
@@ -47,6 +53,13 @@ const resolvers = {
           username: {[Op.in]: userWithChart.chats},
         }
       })
+  
+      // const users = await User.findAll({
+      //   attributes: ['username', 'imageUrl', 'createdAt'],
+      //   where: {
+      //     username: {[Op.ne]: user.username},
+      // }})
+      
       console.log('UserWithChart///', friends)
     
       return friends
