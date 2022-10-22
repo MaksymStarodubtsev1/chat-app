@@ -22,7 +22,7 @@ const typeDefs = gql`
   
   type Query {
     getUsers: [User]!
-    getUserChats: [User]
+    getAllUsers: [User]
     login(username: String!, password: String!): User!
     getMessages(from: String!): [Message]!
   }
@@ -35,6 +35,7 @@ const typeDefs = gql`
       confirmPassword: String!
     ): User!
     sendMessage(to: String!, content: String!): Message!
+    addNewUserChat(username: String!): [String]!
   }
   
   type Subscription {

@@ -44,25 +44,18 @@ const resolvers = {
         console.log(err)
       }
     },
-    getUserChats: async (_, __, { user }) => {
+    getAllUsers: async (_, __, { user }) => {
       const userWithChart = await User.findOne({
         where: {username: user.username}
       })
-      const friends = await User.findAll({
-        where: {
-          username: {[Op.in]: userWithChart.chats},
-        }
-      })
   
-      // const users = await User.findAll({
-      //   attributes: ['username', 'imageUrl', 'createdAt'],
-      //   where: {
-      //     username: {[Op.ne]: user.username},
-      // }})
-      
-      console.log('UserWithChart///', friends)
+      const users = await User.findAll({
+        attributes: ['username', 'imageUrl', 'createdAt'],
+        where: {
+          username: {[Op.ne]: user.username},
+      }})
     
-      return friends
+      return users
     },
     login: async (_, args) => {
       const {username, password} = args
@@ -132,6 +125,29 @@ const resolvers = {
         throw new UserInputError('Bad input', { errors: err})
       }
     },
+    addNewUserChat: async (_, {username}, {user}) => {
+      try {
+        const currentUser = await User.findOne({where: {
+            username: {[Op.eq]: user.username}
+          }})
+        
+        if (!(
+          currentUser.chats.some(u => u === `${username}`)
+          || username === user.username)
+        ) {
+          currentUser.set({
+            chats: [username, ...currentUser.chats]
+          })
+          await currentUser.save();
+        }
+        console.log('currentUser////', currentUser.chats, username)
+    
+        return currentUser.chats
+        
+      }catch(err) {
+        console.log(err)
+      }
+    }
   }
 };
 
