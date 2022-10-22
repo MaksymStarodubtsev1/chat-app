@@ -7,7 +7,7 @@ const typeDefs = gql`
     email: String
     imageUrl: String
     createdAt: String!
-    charts: String
+    chats: String
     token: String
     latestMessage: Message
   }
@@ -22,7 +22,7 @@ const typeDefs = gql`
   
   type Query {
     getUsers: [User]!
-    getUserCharts: [String]
+    getUserChats: [String]
     login(username: String!, password: String!): User!
     getMessages(from: String!): [Message]!
   }

@@ -72,11 +72,11 @@ const resolvers = {
         throw err
       }
     },
-    getUserCharts: async (_, __, { user }) => {
+    getUserChats: async (_, __, { user }) => {
       const userWithChart = await User.findOne({
         where: {username: user.username}
       })
-      console.log('UserWithChart///', userWithChart.charts)
+      console.log('UserWithChart///', userWithChart.chats)
 
       return 'fwfwe'
     }

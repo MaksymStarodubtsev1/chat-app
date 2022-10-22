@@ -27,14 +27,15 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      charts: {
+      chats: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: "",
         get() {
-          return this.getDataValue('charts').split(';')
+          return this.getDataValue('chats').split(';')
         },
         set(val) {
-          this.setDataValue('charts',val.join(';'));
+          this.setDataValue('chats',val.join(';'));
         },
       },
       updatedAt: {
