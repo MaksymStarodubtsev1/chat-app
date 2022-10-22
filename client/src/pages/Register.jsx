@@ -23,7 +23,7 @@ export default function Register(props) {
   const [errors, setErrors] = useState({})
   
   const [register, {loading}] = useMutation(REGISTER_USER, {
-    update: (_, __) => props.history.push('/login'),
+    update: (_, __) => {window.location.href = '/'},
     onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors)
   });
   
