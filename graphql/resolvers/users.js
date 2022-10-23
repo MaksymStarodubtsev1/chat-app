@@ -132,10 +132,12 @@ const resolvers = {
           || username === user.username)
         ) {
           currentUser.set({
-            chats: [username, ...currentUser.chats]
+            chats: [username, ...currentUser.chats],
+            requests: currentUser.filter(u => `${u === username}`)
           })
           friendUser.set({
-            chats: [user.username, ...currentUser.chats]
+            chats: [user.username, ...currentUser.chats],
+            requests: currentUser.filter(u => u === `${user.username}`)
           })
   
           await currentUser.save();
@@ -146,6 +148,41 @@ const resolvers = {
         return currentUser.chats
         
       }catch(err) {
+        console.log(err)
+      }
+    },
+    addNewRequest: async (_, {username}, {user}) => {
+      try {
+        if(!user) throw new AuthenticationError('Unauthenticated')
+  
+        const currentUser = await User.findOne({where: {
+            username: {[Op.eq]: user.username}
+          }})
+  
+        const friendUser = await User.findOne({where: {
+            username: {[Op.eq]: username}
+          }})
+  
+        if (!(
+          currentUser.chats.some(u => u === `${username}`)
+          || friendUser.chats.some(u => u === `${user.username}`)
+          || currentUser.requests.some(u => u === `${username}`)
+          || friendUser.requests.some(u => u === `${user.username}`)
+          || username === user.username)
+        ) {
+          currentUser.set({
+            requests: [username, ...currentUser.requests]
+          })
+          friendUser.set({
+            requests: [user.username, ...currentUser.requests]
+          })
+    
+          await currentUser.save();
+          await friendUser.save();
+        }
+        
+        return currentUser.chats
+      } catch(err) {
         console.log(err)
       }
     }

@@ -41,6 +41,17 @@ module.exports = (sequelize, DataTypes) => {
         this.setDataValue('chats',val.join(';'));
       },
     },
+    requests: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "boss;",
+      get() {
+        return this.getDataValue('requests').split(';')
+      },
+      set(val) {
+        this.setDataValue('requests',val.join(';'));
+      },
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,

@@ -38,6 +38,17 @@ module.exports = {
           this.setDataValue('chats',val.join(';'));
         },
       },
+      requests: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "",
+        get() {
+          return this.getDataValue('requests').split(';')
+        },
+        set(val) {
+          this.setDataValue('requests',val.join(';'));
+        },
+      },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -8,6 +8,7 @@ const typeDefs = gql`
     imageUrl: String
     createdAt: String!
     chats: String
+    requests: String
     token: String
     latestMessage: Message
   }
@@ -35,6 +36,7 @@ const typeDefs = gql`
     ): User!
     sendMessage(to: String!, content: String!): Message!
     addNewUserChat(username: String!): [String]!
+    addNewRequest(username: String!): [String]!
   }
   
   type Subscription {
