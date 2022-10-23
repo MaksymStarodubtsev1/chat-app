@@ -9,9 +9,10 @@ import {
 import { setContext } from '@apollo/client/link/context'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
+import { API_BACKEND } from '../config/env.json'
 
 let httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: API_BACKEND,
 });
 
 const authLink = setContext((_, { headers }) => {
