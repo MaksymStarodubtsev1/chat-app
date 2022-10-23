@@ -10,6 +10,7 @@ import {Home} from "./pages/home/Home";
 import { AuthProvider } from "./context/auth";
 import DynamicRoute from "./pages/util/dynamicRoute";
 import {MessageProvider} from "./context/message";
+import Contacts from "./pages/home/Contacts";
 
 function App() {
   
@@ -22,6 +23,7 @@ function App() {
               <Routes>
                 <Route element={<DynamicRoute auth={true}/>}>
                   <Route path="/" element={<Home/>} />
+                  <Route path="/contacts" element={<Contacts/>} />
                 </Route>
                 <Route path="/register" element={<Register/>} />
                 <Route path="/login" element={<Login/>} />

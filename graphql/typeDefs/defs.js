@@ -21,8 +21,7 @@ const typeDefs = gql`
   }
   
   type Query {
-    getUsers: [User]!
-    getAllUsers: [User]
+    getUsers(getAll: Boolean): [User]!
     login(username: String!, password: String!): User!
     getMessages(from: String!): [Message]!
   }

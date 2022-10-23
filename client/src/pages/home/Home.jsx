@@ -7,7 +7,6 @@ import {Messages} from "./Messages";
 
 export const Home = () => {
   const dispatch = useAuthDispatch()
-  const navigate = useNavigate();
   
   const [selectedUser, addSelectedUser] = useState(null)
   
@@ -19,6 +18,11 @@ export const Home = () => {
   return (
     <Fragment>
       <Row className="bg-white justify-content-around mb-1">
+        <Col>
+          <Link to="/contacts">
+            <Button variant="link">Users</Button>
+          </Link>
+        </Col>
         <Col>
           <Link to="/login">
             <Button variant="link">Login</Button>

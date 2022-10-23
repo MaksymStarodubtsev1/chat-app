@@ -8,21 +8,24 @@ const { Op } = require('sequelize')
 
 const resolvers = {
   Query: {
-    getUsers: async (_, __, { user }) => {
+    getUsers: async (_, {getAll}, { user }) => {
       try {
         if(!user) throw new AuthenticationError('Unauthenticated')
-  
+        
         const userWithChart = await User.findOne({
           where: {username: user.username}
         })
+
         const users = await User.findAll({
+          attributes: ['username', 'imageUrl', 'createdAt'],
           where: {
-            username: {
-              [Op.in]: userWithChart.chats,
-              [Op.ne]: user.username
-            },
-          }
-        })
+            username: getAll
+              ? {[Op.ne]: user.username}
+              : {
+                  [Op.in]: userWithChart.chats,
+                  [Op.ne]: user.username
+                },
+        }})
         
         const allUserMessages = await Message.findAll({where: {
           [Op.or]: [{from: user.username}, {to: user.username}],
@@ -38,24 +41,10 @@ const resolvers = {
           return someUser
         })
         
-        
         return usersMessagesList
       } catch(err) {
         console.log(err)
       }
-    },
-    getAllUsers: async (_, __, { user }) => {
-      const userWithChart = await User.findOne({
-        where: {username: user.username}
-      })
-  
-      const users = await User.findAll({
-        attributes: ['username', 'imageUrl', 'createdAt'],
-        where: {
-          username: {[Op.ne]: user.username},
-      }})
-    
-      return users
     },
     login: async (_, args) => {
       const {username, password} = args
