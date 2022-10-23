@@ -9,7 +9,7 @@ import {
 import { setContext } from '@apollo/client/link/context'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
-import { API_BACKEND } from '../config/env.json'
+import { API_BACKEND } from './config/env.js'
 
 let httpLink = createHttpLink({
   uri: API_BACKEND,
