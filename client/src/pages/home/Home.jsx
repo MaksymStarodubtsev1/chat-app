@@ -24,6 +24,11 @@ export const Home = () => {
           </Link>
         </Col>
         <Col>
+          <Link to="/contacts">
+            <Button variant="link">Request</Button>
+          </Link>
+        </Col>
+        <Col>
           <Link to="/login">
             <Button variant="link">Login</Button>
           </Link>
