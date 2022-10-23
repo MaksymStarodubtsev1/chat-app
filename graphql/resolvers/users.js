@@ -116,6 +116,8 @@ const resolvers = {
     },
     addNewUserChat: async (_, {username}, {user}) => {
       try {
+        if(!user) throw new AuthenticationError('Unauthenticated')
+        
         const currentUser = await User.findOne({where: {
             username: {[Op.eq]: user.username}
           }})

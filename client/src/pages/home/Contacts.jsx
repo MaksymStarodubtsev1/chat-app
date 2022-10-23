@@ -48,17 +48,19 @@ const Contacts = () => {
               <div
                 className={`user-div d-flex p-3 ${selected && 'bg-white'}`}
                 key={username}
-                onClick={() => dispatch({type: 'SET_SELECTED_USER', payload: username})}
+                // onClick={() => dispatch({type: 'SET_SELECTED_USER', payload: username})}
                 role="button"
               >
-                <Image
-                  src={imageUrl ?? ''}
-                  className="mr-2 user-image"
-      
-                />
+                { imageUrl
+                   ? <Image
+                      src={imageUrl}
+                      className="mr-2 user-image"
+          
+                    />
+                  : <span className="icon-user user-image text-center flex align-items-center" />
+                }
                 <div className="ps-3 d-none d-md-block">
                   <p className="text-success">{username}</p>
-                  <p className="font-weight-light">{latestMessage?.content ?? 'you are now connected'}</p>
                 </div>
               </div>
             ))}
