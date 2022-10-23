@@ -120,16 +120,26 @@ const resolvers = {
         
         const currentUser = await User.findOne({where: {
             username: {[Op.eq]: user.username}
-          }})
+        }})
+  
+        const friendUser = await User.findOne({where: {
+            username: {[Op.eq]: username}
+        }})
         
         if (!(
           currentUser.chats.some(u => u === `${username}`)
+          || friendUser.chats.some(u => u === `${user.username}`)
           || username === user.username)
         ) {
           currentUser.set({
             chats: [username, ...currentUser.chats]
           })
+          friendUser.set({
+            chats: [user.username, ...currentUser.chats]
+          })
+  
           await currentUser.save();
+          await friendUser.save();
         }
         console.log('currentUser////', currentUser.chats, username)
     
