@@ -7,10 +7,15 @@ const typeDefs = gql`
     email: String
     imageUrl: String
     createdAt: String!
-    chats: String
-    requests: String
     token: String
     latestMessage: Message
+  }
+  
+  type Request {
+    uuid: String!
+    type: String!
+    from: String!
+    to: String!
   }
   
   type Message {
@@ -22,7 +27,7 @@ const typeDefs = gql`
   }
   
   type Query {
-    getUsers(getAll: Boolean): [User]!
+    getUsers(getAll: Boolean, friendsRequests: Boolean): [User]!
     login(username: String!, password: String!): User!
     getMessages(from: String!): [Message]!
   }
@@ -36,7 +41,8 @@ const typeDefs = gql`
     ): User!
     sendMessage(to: String!, content: String!): Message!
     addNewUserChat(username: String!): [String]!
-    addNewRequest(username: String!): [String]!
+    addNewRequest(username: String!): Request
+    confirmRequest(username: String!): Request!
   }
   
   type Subscription {

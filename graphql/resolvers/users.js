@@ -1,5 +1,5 @@
 const bcryptjs = require('bcryptjs')
-const { Message, User } = require('../../models')
+const { Message, User, Request } = require('../../models')
 const { UserInputError } = require(('apollo-server'))
 const {AuthenticationError} = require("apollo-server");
 const jwt = require('jsonwebtoken');
@@ -8,13 +8,27 @@ const { Op } = require('sequelize')
 
 const resolvers = {
   Query: {
-    getUsers: async (_, {getAll}, { user }) => {
+    getUsers: async (_, {getAll, friendsRequests}, { user }) => {
       try {
         if(!user) throw new AuthenticationError('Unauthenticated')
         
-        const userWithChart = await User.findOne({
-          where: {username: user.username}
+        const friendsRequest = await Request.findAll({
+          where: friendsRequests ?
+            {[Op.or]: [{ to: user.username }, { from: user.username}],
+              type: "Friend"
+            }
+            :
+            {
+              to: user.username,
+              type: "Request"
+            }
         })
+        
+        const friendsList = friendsRequests ?
+          friendsRequest.reduce((prev, cur) => [...prev, cur?.from, cur?.to], [])
+          : friendsRequest.map(u => u?.from)
+        
+        console.log('friendsRequest/////', friendsList)
 
         const users = await User.findAll({
           attributes: ['username', 'imageUrl', 'createdAt'],
@@ -22,7 +36,7 @@ const resolvers = {
             username: getAll
               ? {[Op.ne]: user.username}
               : {
-                  [Op.in]: userWithChart.chats,
+                  [Op.in]: friendsList,
                   [Op.ne]: user.username
                 },
         }})
@@ -114,46 +128,49 @@ const resolvers = {
         throw new UserInputError('Bad input', { errors: err})
       }
     },
-    addNewUserChat: async (_, {username}, {user}) => {
+    addNewRequest: async (_, {username}, {user}) => {
       try {
         if(!user) throw new AuthenticationError('Unauthenticated')
-        
-        const currentUser = await User.findOne({where: {
-            username: {[Op.eq]: user.username}
-        }})
+        const isRequest = await Request.findOne({
+          where: {
+            from: user.username,
+            to: username,
+            type: 'Request'
+          }
+        })
   
-        const friendUser = await User.findOne({where: {
-            username: {[Op.eq]: username}
-        }})
-        
-        if (!(
-          currentUser.chats.some(u => u === `${username}`)
-          || friendUser.chats.some(u => u === `${user.username}`)
-          || username === user.username)
-        ) {
-          currentUser.set({
-            chats: [username, ...currentUser.chats],
-            requests: currentUser?.filter(u => u === `${username}`)
-          })
-          friendUser.set({
-            chats: [user.username, ...currentUser.chats],
-            requests: currentUser?.filter(u => u === `${user.username}`)
-          })
+        if(isRequest) throw new UserInputError('Request is already created')
   
-          await currentUser.save();
-          await friendUser.save();
-        }
-        console.log('currentUser////', currentUser.chats, username)
-    
-        return currentUser.chats
+        const request = await Request.create({
+          from: user.username,
+          to: username,
+          type: 'Request'
+        })
         
-      }catch(err) {
+        return await request
+      } catch(err) {
         console.log(err)
       }
     },
-    addNewRequest: async (_, {username}, {user}) => {
+    confirmRequest: async (_, {username}, {user}) => {
       try {
-      
+        if(!user) throw new AuthenticationError('Unauthenticated')
+        
+        
+        const request = await Request.findOne({
+          where: {
+            from: username,
+            to: user.username
+          }
+        })
+        
+        request.set({
+          type: 'Friend'
+        })
+  
+        await request.save()
+        
+        return request
       } catch(err) {
         console.log(err)
       }
