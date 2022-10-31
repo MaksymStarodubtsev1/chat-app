@@ -11,6 +11,7 @@ import { AuthProvider } from "./context/auth";
 import DynamicRoute from "./pages/util/dynamicRoute";
 import {MessageProvider} from "./context/message";
 import Contacts from "./pages/home/Contacts";
+import Requests from "./pages/home/Requests";
 
 function App() {
   
@@ -24,6 +25,7 @@ function App() {
                 <Route element={<DynamicRoute auth={true}/>}>
                   <Route path="/" element={<Home/>} />
                   <Route path="/contacts" element={<Contacts/>} />
+                  <Route path="/requests" element={<Requests/>} />
                 </Route>
                 <Route path="/register" element={<Register/>} />
                 <Route path="/login" element={<Login/>} />

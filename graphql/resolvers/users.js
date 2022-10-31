@@ -27,8 +27,6 @@ const resolvers = {
         const friendsList = friendsRequests ?
           friendsRequest.reduce((prev, cur) => [...prev, cur?.from, cur?.to], [])
           : friendsRequest.map(u => u?.from)
-        
-        console.log('friendsRequest/////', friendsList)
 
         const users = await User.findAll({
           attributes: ['username', 'imageUrl', 'createdAt'],

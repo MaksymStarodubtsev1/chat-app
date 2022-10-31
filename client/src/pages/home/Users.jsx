@@ -4,8 +4,8 @@ import {Image} from "react-bootstrap";
 import {useMessageDispatch, useMessageState} from "../../context/message";
 
 const GET_USERS = gql`
-  query getUsers {
-    getUsers {
+  query getUsers($friendsRequests: Boolean) {
+    getUsers(friendsRequests: $friendsRequests) {
       username imageUrl createdAt
       latestMessage {
         content
@@ -19,13 +19,14 @@ const GET_USERS = gql`
 export const Users = () => {
   const dispatch = useMessageDispatch()
   
-  
   const { users } = useMessageState()
   const selectedUser = users?.find(u => u.selected === true)?.username
   const { loading } = useQuery(GET_USERS,{
+    variables: {friendsRequests: true},
     onCompleted: data => dispatch({type: 'SET_USERS', payload: data.getUsers})
   })
   const usersData = users ?? []
+console.log('users', users)
   const usersMessage = loading ? 'loading...' : 'No user have joined yet'
   
   return (

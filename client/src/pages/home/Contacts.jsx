@@ -2,7 +2,7 @@ import React, {Fragment} from "react";
 import {Button, Col, Container, Image, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useMessageDispatch, useMessageState} from "../../context/message";
-import {gql, useQuery} from "@apollo/client";
+import {gql, useMutation, useQuery} from "@apollo/client";
 
 
 const GET_USERS = gql`
@@ -18,6 +18,16 @@ const GET_USERS = gql`
   }
 `
 
+const ADD_REQUEST = gql`
+  mutation addNewRequest($username: String!) {
+    addNewRequest(username: $username) {
+      from
+      to
+      type
+    }
+  }
+`
+
 const Contacts = () => {
   const dispatch = useMessageDispatch()
   
@@ -27,6 +37,7 @@ const Contacts = () => {
     variables: {getAll: true},
     onCompleted: data => dispatch({type: 'SET_USERS', payload: data.getUsers})
   })
+  const [ mutation ] = useMutation(ADD_REQUEST)
   const usersData = users ?? []
   const usersMessage = loading ? 'loading...' : 'No user have joined yet'
   
@@ -48,7 +59,7 @@ const Contacts = () => {
               <div
                 className={`user-div d-flex p-3 ${selected && 'bg-white'}`}
                 key={username}
-                // onClick={() => dispatch({type: 'SET_SELECTED_USER', payload: username})}
+                onClick={() => mutation({variables: {username}})}
                 role="button"
               >
                 { imageUrl

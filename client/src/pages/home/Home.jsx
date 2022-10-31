@@ -4,6 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useAuthDispatch} from "../../context/auth";
 import {Users} from "./Users";
 import {Messages} from "./Messages";
+import Requests from "./Requests";
 
 export const Home = () => {
   const dispatch = useAuthDispatch()
@@ -24,7 +25,7 @@ export const Home = () => {
           </Link>
         </Col>
         <Col>
-          <Link to="/contacts">
+          <Link to="/requests">
             <Button variant="link">Request</Button>
           </Link>
         </Col>
