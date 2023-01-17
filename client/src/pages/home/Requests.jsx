@@ -1,8 +1,10 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useState} from "react";
 import {Button, Col, Image, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useMessageDispatch, useMessageState} from "../../context/message";
 import {gql, useMutation, useQuery} from "@apollo/client";
+import {MyVerticallyCenteredModal} from "../../elements/CenteredModal";
+import {toast} from "react-toastify";
 
 const GET_USERS = gql`
   query getUsers {
@@ -29,14 +31,30 @@ const CONFIRM_REQUEST = gql`
 const Requests = () => {
   const dispatch = useMessageDispatch()
 
+  const [modalOpen, setModalOpen] = useState(false)
+
   const { users } = useMessageState()
   const { loading } = useQuery(GET_USERS,{
     onCompleted: data => dispatch({type: 'SET_USERS', payload: data.getUsers})
   })
   
-  const [ mutation ] = useMutation(CONFIRM_REQUEST)
+  const [ mutation, {loading: friendRequestLoading} ] = useMutation(CONFIRM_REQUEST)
   const usersData = users ?? []
   const usersMessage = loading ? 'loading...' : 'No user have joined yet'
+
+  function handleAddFriend(username, setModalOpen) {
+    mutation({variables: {username}})
+      .then(res => {
+        if(res.data?.addNewRequest?.from) {
+          toast.success("Success friend adding");
+        }
+      })
+      .catch(err => {
+        toast.error("adding failed");
+      })
+
+    setModalOpen(false)
+  }
   
   return (
     <Fragment>
@@ -58,7 +76,6 @@ const Requests = () => {
               <div
                 className={`user-div d-flex p-3 ${selected && 'bg-white'}`}
                 key={username}
-                onClick={() => mutation({variables: {username}})}
                 role="button"
               >
                 { imageUrl
@@ -71,7 +88,32 @@ const Requests = () => {
                 }
                 <div className="ps-3 d-none d-md-block">
                   <p className="text-success">{username}</p>
+                  <Button
+                    className="rounded-5"
+                    size="sm"
+                    variant="outline-primary"
+                    data-toggle="addFriendModal"
+                    onClick={() => setModalOpen(true)}
+                  >
+                    Confirm friend
+                  </Button>
                 </div>
+                <MyVerticallyCenteredModal
+                  show={modalOpen}
+                  onHide={() => handleAddFriend(username, setModalOpen)}
+                >
+                  Send friend request to this user?
+                </MyVerticallyCenteredModal>
+                <MyVerticallyCenteredModal
+                  show={friendRequestLoading}
+                  size="small"
+                >
+                  <div className="d-flex justify-content-center">
+                    <div className="spinner-border" role="status">
+                      <span className="sr-only" />
+                    </div>
+                  </div>
+                </MyVerticallyCenteredModal>
               </div>
           ))}
         </Col>
