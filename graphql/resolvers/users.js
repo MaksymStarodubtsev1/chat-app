@@ -12,32 +12,38 @@ const resolvers = {
       try {
         if(!user) throw new AuthenticationError('Unauthenticated')
         
-        const friendsRequest = await Request.findAll({
-          where: friendsRequests ?
-            {[Op.or]: [{ to: user.username }, { from: user.username}],
-              type: "Friend"
-            }
-            :
-            {
-              to: user.username,
-              type: "Request"
-            }
+        const friendsRequestList = await Request.findAll({
+          where: friendsRequests
+            ? {
+                [Op.or]: [{ to: user.username }, { from: user.username}],
+                type: "Friend"
+              }
+            : {
+                to: user.username,
+                type: "Request"
+              }
         })
         
-        const friendsList = friendsRequests ?
-          friendsRequest.reduce((prev, cur) => [...prev, cur?.from, cur?.to], [])
-          : friendsRequest.map(u => u?.from)
+        const friendsList = friendsRequests
+          ? friendsRequestList.reduce((prev, cur) => [...prev, cur?.from, cur?.to], [])
+          : friendsRequestList.map(u => u?.from)
+
+        console.log('friendsList/////////', friendsList)
 
         const users = await User.findAll({
           attributes: ['username', 'imageUrl', 'createdAt'],
           where: {
             username: getAll
-              ? {[Op.ne]: user.username}
+              ? {
+                  [Op.ne]: user.username
+                }
               : {
                   [Op.in]: friendsList,
                   [Op.ne]: user.username
                 },
         }})
+
+        console.log('users/////', users)
         
         const allUserMessages = await Message.findAll({where: {
           [Op.or]: [{from: user.username}, {to: user.username}],

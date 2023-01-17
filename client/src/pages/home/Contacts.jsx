@@ -46,11 +46,11 @@ const Contacts = () => {
       mutation({variables: {username}})
         .then(res => {
           if(res.data?.addNewRequest?.from) {
-            toast("Success friend adding");
+            toast.success("Success friend adding");
           }
         })
         .catch(err => {
-          toast("adding failed");
+          toast.error("adding failed");
         })
 
     setModalOpen(false)

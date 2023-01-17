@@ -1,11 +1,8 @@
-
-
 import React, {Fragment} from "react";
-import {Button, Col, Container, Image, Row} from "react-bootstrap";
+import {Button, Col, Image, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useMessageDispatch, useMessageState} from "../../context/message";
 import {gql, useMutation, useQuery} from "@apollo/client";
-
 
 const GET_USERS = gql`
   query getUsers {
@@ -31,8 +28,7 @@ const CONFIRM_REQUEST = gql`
 
 const Requests = () => {
   const dispatch = useMessageDispatch()
-  
-  
+
   const { users } = useMessageState()
   const { loading } = useQuery(GET_USERS,{
     onCompleted: data => dispatch({type: 'SET_USERS', payload: data.getUsers})
@@ -56,25 +52,27 @@ const Requests = () => {
       </Row>
       <Row className="bg-white">
         <Col sx={12} className="contacts-box">
-          {usersData.length < 1 ? usersMessage : usersData.map(({username, imageUrl, latestMessage, selected}) => (
-            <div
-              className={`user-div d-flex p-3 ${selected && 'bg-white'}`}
-              key={username}
-              onClick={() => mutation({variables: {username}})}
-              role="button"
-            >
-              { imageUrl
-                ? <Image
-                  src={imageUrl}
-                  className="mr-2 user-image"
-                
-                />
-                : <span className="icon-user user-image text-center flex align-items-center" />
-              }
-              <div className="ps-3 d-none d-md-block">
-                <p className="text-success">{username}</p>
+          {usersData.length < 1
+            ? usersMessage
+            : usersData.map(({username, imageUrl, selected}) => (
+              <div
+                className={`user-div d-flex p-3 ${selected && 'bg-white'}`}
+                key={username}
+                onClick={() => mutation({variables: {username}})}
+                role="button"
+              >
+                { imageUrl
+                  ? <Image
+                    src={imageUrl}
+                    className="mr-2 user-image"
+
+                  />
+                  : <span className="icon-user user-image text-center flex align-items-center" />
+                }
+                <div className="ps-3 d-none d-md-block">
+                  <p className="text-success">{username}</p>
+                </div>
               </div>
-            </div>
           ))}
         </Col>
       </Row>
