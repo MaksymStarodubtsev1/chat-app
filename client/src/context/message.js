@@ -31,7 +31,6 @@ const messageReducer = (state, action) => {
       return { ...state, users: usersCopy}
     
     case 'ADD_MESSAGE':
-      // const userIndex = state.users?.findIndex(u => u.username === action.payload.user)
       const stateCopyWithMessage = [ ...state.users]
       
       const users = stateCopyWithMessage.map(u => {
@@ -45,11 +44,7 @@ const messageReducer = (state, action) => {
         return u
       })
 
-        // stateCopyWithMessage[userIndex].messages = [action.payload.message, ...state.users[userIndex].messages]
-        // console.log('messageList2', messageList)
-      
       return {...state, users}
-      // return state
     default:
       throw new Error(`Unknown action type: ${action.type}`)
   }

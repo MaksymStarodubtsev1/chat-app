@@ -144,9 +144,11 @@ const resolvers = {
           to: username,
           type: 'Request'
         })
+        setTimeout(() => {}, 2000)
         
         return await request
       } catch(err) {
+        return new Error('request failed')
         console.log(err)
       }
     },
