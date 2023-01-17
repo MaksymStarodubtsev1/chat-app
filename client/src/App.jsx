@@ -12,6 +12,8 @@ import DynamicRoute from "./pages/util/dynamicRoute";
 import {MessageProvider} from "./context/message";
 import Contacts from "./pages/home/Contacts";
 import Requests from "./pages/home/Requests";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   
@@ -21,6 +23,18 @@ function App() {
         <MessageProvider>
           <BrowserRouter>
             <Container className='pt-5'>
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+              />
               <Routes>
                 <Route element={<DynamicRoute auth={true}/>}>
                   <Route path="/" element={<Home/>} />

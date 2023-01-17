@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {useMessageDispatch, useMessageState} from "../../context/message";
 import {gql, useMutation, useQuery} from "@apollo/client";
 import {MyVerticallyCenteredModal} from "../../elements/CenteredModal";
+import {toast} from "react-toastify";
 
 
 const GET_USERS = gql`
@@ -45,11 +46,11 @@ const Contacts = () => {
       mutation({variables: {username}})
         .then(res => {
           if(res.data?.addNewRequest?.from) {
-            alert('success friend adding')
+            toast("Success friend adding");
           }
         })
         .catch(err => {
-          alert('adding failed' + err)
+          toast("adding failed");
         })
 
     setModalOpen(false)
