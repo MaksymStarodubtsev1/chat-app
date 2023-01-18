@@ -59,14 +59,13 @@ const Contacts = () => {
   return (
     <Fragment>
         <Row className="bg-white justify-content-center align-items-center">
-          <Col xs={1}>
+          <Col xs={12}>
             <Link to="/">
               <Button variant="link" className="btn ms-1 text-decoration-none">
                 <span className="icon-arrow-left" />
               </Button>
             </Link>
           </Col>
-          <Col xs={11}>Input</Col>
         </Row>
         <Row className="bg-white">
           <Col sx={12} className="contacts-box">

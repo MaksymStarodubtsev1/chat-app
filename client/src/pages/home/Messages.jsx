@@ -89,7 +89,7 @@ export const Messages = () => {
               value={content}
               onChange={e => setContent(e.target.value)}
             />
-            <Button type="submit" class="btn ms-1">
+            <Button type="submit" className="btn ms-1">
               <span className="icon-rocket" />
             </Button>
           </Form.Group>

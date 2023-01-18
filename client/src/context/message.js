@@ -5,7 +5,6 @@ const MessageDispatchContext = createContext()
 
 
 const messageReducer = (state, action) => {
-  console.log('???action///////////', action)
   switch (action.type) {
     case 'SET_USERS':
       return {

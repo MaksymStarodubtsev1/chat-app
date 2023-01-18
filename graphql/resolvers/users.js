@@ -23,7 +23,14 @@ const resolvers = {
                 type: "Request"
               }
         })
-        
+
+        const friendProcessList = await Request.findAll({
+          attributes: ['to'],
+          where: {
+            from: user.username
+          }
+        })
+
         const friendsList = friendsRequests
           ? friendsRequestList.reduce((prev, cur) => [...prev, cur?.from, cur?.to], [])
           : friendsRequestList.map(u => u?.from)
@@ -33,15 +40,13 @@ const resolvers = {
           where: {
             username: getAll
               ? {
-                  [Op.ne]: user.username
+                  [Op.notIn]: [user.username, ...friendProcessList.reduce((ac, cur) => [...ac, cur?.to], [])]
                 }
               : {
                   [Op.in]: friendsList,
                   [Op.ne]: user.username
                 },
         }})
-
-        console.log('users/////', users)
         
         const allUserMessages = await Message.findAll({where: {
           [Op.or]: [{from: user.username}, {to: user.username}],
