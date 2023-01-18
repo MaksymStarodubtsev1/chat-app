@@ -25,9 +25,9 @@ const resolvers = {
         })
 
         const friendProcessList = await Request.findAll({
-          attributes: ['to'],
+          attributes: ['to', 'from'],
           where: {
-            from: user.username
+            [Op.or]: {from: user.username, to: user.username},
           }
         })
 
@@ -40,7 +40,7 @@ const resolvers = {
           where: {
             username: getAll
               ? {
-                  [Op.notIn]: [user.username, ...friendProcessList.reduce((ac, cur) => [...ac, cur?.to], [])]
+                  [Op.notIn]: [user.username, ...friendProcessList.reduce((ac, cur) => [...ac, cur?.from, cur?.to], [])]
                 }
               : {
                   [Op.in]: friendsList,
@@ -168,8 +168,16 @@ const resolvers = {
         
         const request = await Request.findOne({
           where: {
-            from: username,
-            to: user.username
+            [Op.or]: [
+              {
+                from: username,
+                to: user.username
+              },
+              {
+                from: user.username,
+                to: username
+              }
+            ]
           }
         })
         
