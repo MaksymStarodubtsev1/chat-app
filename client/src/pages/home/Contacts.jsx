@@ -1,10 +1,10 @@
-import React, {Fragment, useState} from "react";
-import {Button, Col, Image, Row} from "react-bootstrap";
+import React, {Fragment} from "react";
+import {Button, Col, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useMessageDispatch, useMessageState} from "../../context/message";
-import {gql, useMutation, useQuery} from "@apollo/client";
-import {MyVerticallyCenteredModal} from "../../elements/CenteredModal";
-import {toast} from "react-toastify";
+import {gql, useQuery} from "@apollo/client";
+import {ContactList} from "../../elements/ContactList";
+import {useRequests} from "../../hooks/useRequests";
 
 
 const GET_USERS = gql`
@@ -20,40 +20,23 @@ const GET_USERS = gql`
   }
 `
 
-const ADD_REQUEST = gql`
-  mutation addNewRequest($username: String!) {
-    addNewRequest(username: $username) {
-      from
-      to
-      type
-    }
-  }
-`
-
 const Contacts = () => {
   const dispatch = useMessageDispatch()
   const { users } = useMessageState()
+
   const { loading } = useQuery(GET_USERS,{
     variables: {getAll: true},
     onCompleted: data => dispatch({type: 'SET_USERS', payload: data.getUsers})
   })
-  const [ mutation, {loading: friendRequestLoading} ] = useMutation(ADD_REQUEST)
+
   const usersData = users ?? []
-  const [modalOpen, setModalOpen] = useState(false)
   const usersMessage = loading ? 'loading...' : 'No user have joined yet'
 
-  function handleAddFriend(username, setModalOpen) {
-      mutation({variables: {username}})
-        .then(res => {
-          if(res.data?.addNewRequest?.from) {
-            toast.success("Success friend adding");
-          }
-        })
-        .catch(err => {
-          toast.error("adding failed");
-        })
+  const handleRequest = useRequests()
 
-    setModalOpen(false)
+  const templateInfo = {
+    requestLabel: 'Add friend request',
+    modalHeader: 'Send friend request to this user?'
   }
   
   return (
@@ -71,49 +54,12 @@ const Contacts = () => {
           <Col sx={12} className="contacts-box">
             {usersData.length < 1
               ? usersMessage
-              : usersData.map(({username, imageUrl, selected}) => (
-                <div
-                  className={`user-div d-flex p-3 ${selected && 'bg-white'}`}
-                  key={username}
-                  role="button"
-                >
-                    { imageUrl
-                       ? <Image
-                          src={imageUrl}
-                          className="user-image img-fluid"
-                        />
-                      : <span className="icon-user user-image text-center flex align-items-center" />
-                    }
-                  <div className="ps-3 d-none d-md-block">
-                    <p className="text-success">{username}</p>
-                    <Button
-                      className="rounded-5"
-                      size="sm"
-                      variant="outline-primary"
-                      data-toggle="addFriendModal"
-                      onClick={() => setModalOpen(true)}
-                    >
-                      Add friend request
-                    </Button>
-                    <MyVerticallyCenteredModal
-                      show={modalOpen}
-                      onHide={() => handleAddFriend(username, setModalOpen)}
-                    >
-                      Send friend request to this user?
-                    </MyVerticallyCenteredModal>
-                    <MyVerticallyCenteredModal
-                      show={friendRequestLoading}
-                      size="small"
-                    >
-                      <div className="d-flex justify-content-center">
-                        <div className="spinner-border" role="status">
-                          <span className="sr-only" />
-                        </div>
-                      </div>
-                    </MyVerticallyCenteredModal>
-                  </div>
-                </div>
-            ))}
+              : <ContactList
+                  contacts={usersData}
+                  handleRequest={handleRequest}
+                  templateInfo={templateInfo}
+                />
+            }
           </Col>
         </Row>
     </Fragment>

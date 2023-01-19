@@ -5,6 +5,9 @@ import {useMessageDispatch, useMessageState} from "../../context/message";
 import {gql, useMutation, useQuery} from "@apollo/client";
 import {MyVerticallyCenteredModal} from "../../elements/CenteredModal";
 import {toast} from "react-toastify";
+import {ContactList} from "../../elements/ContactList";
+import {useConfirmation} from "../../hooks/useConfirmation";
+import {useRequests} from "../../hooks/useRequests";
 
 const GET_USERS = gql`
   query getUsers {
@@ -19,42 +22,22 @@ const GET_USERS = gql`
   }
 `
 
-const CONFIRM_REQUEST = gql`
-  mutation confirmRequest($username: String!) {
-    confirmRequest(username: $username) {
-      from
-      to
-    }
-  }
-`
-
 const Requests = () => {
   const dispatch = useMessageDispatch()
-
-  const [modalOpen, setModalOpen] = useState(false)
-
   const { users } = useMessageState()
   const { loading } = useQuery(GET_USERS,{
     onCompleted: data => dispatch({type: 'SET_USERS', payload: data.getUsers})
   })
-  
-  const [ mutation, {loading: friendRequestLoading} ] = useMutation(CONFIRM_REQUEST)
+
+  const handleRequest = useConfirmation()
+
+  const templateInfo = {
+    requestLabel: 'Confirm friend request',
+    modalHeader: 'Confirm friend request from this user?'
+  }
+
   const usersData = users ?? []
   const usersMessage = loading ? 'loading...' : 'No user have joined yet'
-
-  function handleAddFriend(username, setModalOpen) {
-    mutation({variables: {username}})
-      .then(res => {
-        if(res.data?.addNewRequest?.from) {
-          toast.success("Success friend adding");
-        }
-      })
-      .catch(err => {
-        toast.error("adding failed");
-      })
-
-    setModalOpen(false)
-  }
   
   return (
     <Fragment>
@@ -71,50 +54,12 @@ const Requests = () => {
         <Col sx={12} className="contacts-box">
           {usersData.length < 1
             ? usersMessage
-            : usersData.map(({username, imageUrl, selected}) => (
-              <div
-                className={`user-div d-flex p-3 ${selected && 'bg-white'}`}
-                key={username}
-                role="button"
-              >
-                { imageUrl
-                  ? <Image
-                    src={imageUrl}
-                    className="mr-2 user-image"
-
-                  />
-                  : <span className="icon-user user-image text-center flex align-items-center" />
-                }
-                <div className="ps-3 d-none d-md-block">
-                  <p className="text-success">{username}</p>
-                  <Button
-                    className="rounded-5"
-                    size="sm"
-                    variant="outline-primary"
-                    data-toggle="addFriendModal"
-                    onClick={() => setModalOpen(true)}
-                  >
-                    Confirm friend
-                  </Button>
-                </div>
-                <MyVerticallyCenteredModal
-                  show={modalOpen}
-                  onHide={() => handleAddFriend(username, setModalOpen)}
-                >
-                  Send friend request to this user?
-                </MyVerticallyCenteredModal>
-                <MyVerticallyCenteredModal
-                  show={friendRequestLoading}
-                  size="small"
-                >
-                  <div className="d-flex justify-content-center">
-                    <div className="spinner-border" role="status">
-                      <span className="sr-only" />
-                    </div>
-                  </div>
-                </MyVerticallyCenteredModal>
-              </div>
-          ))}
+            : <ContactList
+                contacts={usersData}
+                handleRequest={handleRequest}
+                templateInfo={templateInfo}
+              />
+          }
         </Col>
       </Row>
     </Fragment>
