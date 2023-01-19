@@ -18,7 +18,7 @@ export const useConfirmation = () => {
   function handleAddFriend(username, setModalOpen) {
     mutation({variables: {username}})
       .then(res => {
-        if(res.data?.addNewRequest?.from) {
+        if(res.data?.confirmRequest?.from) {
           toast.success("Success friend adding");
         }
       })

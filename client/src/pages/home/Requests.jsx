@@ -1,13 +1,10 @@
-import React, {Fragment, useState} from "react";
-import {Button, Col, Image, Row} from "react-bootstrap";
+import React, {Fragment} from "react";
+import {Button, Col, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useMessageDispatch, useMessageState} from "../../context/message";
-import {gql, useMutation, useQuery} from "@apollo/client";
-import {MyVerticallyCenteredModal} from "../../elements/CenteredModal";
-import {toast} from "react-toastify";
+import {gql, useQuery} from "@apollo/client";
 import {ContactList} from "../../elements/ContactList";
 import {useConfirmation} from "../../hooks/useConfirmation";
-import {useRequests} from "../../hooks/useRequests";
 
 const GET_USERS = gql`
   query getUsers {
@@ -25,20 +22,20 @@ const GET_USERS = gql`
 const Requests = () => {
   const dispatch = useMessageDispatch()
   const { users } = useMessageState()
+
   const { loading } = useQuery(GET_USERS,{
     onCompleted: data => dispatch({type: 'SET_USERS', payload: data.getUsers})
   })
 
-  const handleRequest = useConfirmation()
+  const usersData = users ?? []
+  const usersMessage = loading ? 'loading...' : 'No user have joined yet'
 
+  const handleRequest = useConfirmation()
   const templateInfo = {
     requestLabel: 'Confirm friend request',
     modalHeader: 'Confirm friend request from this user?'
   }
 
-  const usersData = users ?? []
-  const usersMessage = loading ? 'loading...' : 'No user have joined yet'
-  
   return (
     <Fragment>
       <Row className="bg-white justify-content-center align-items-center">

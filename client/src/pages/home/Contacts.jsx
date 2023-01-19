@@ -6,7 +6,6 @@ import {gql, useQuery} from "@apollo/client";
 import {ContactList} from "../../elements/ContactList";
 import {useRequests} from "../../hooks/useRequests";
 
-
 const GET_USERS = gql`
   query getUsers($getAll: Boolean) {
     getUsers(getAll: $getAll) {
